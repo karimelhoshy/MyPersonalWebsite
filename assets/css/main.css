@@ -646,7 +646,7 @@ input, select, textarea {
 
 		.image:before {
 			pointer-events: none;
-			background-image: url("../../images/Background.JPG");
+			background-image: url("../../images/building.jpg");
 			background-color: rgba(19, 21, 25, 0.5);
 			border-radius: 4px;
 			content: '';
