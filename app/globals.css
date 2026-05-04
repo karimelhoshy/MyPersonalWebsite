@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+/* ── design tokens (mirrors mockup-v1.html) ───────────────────────── */
+:root,
+:root[data-theme="dark"],
+html.dark {
+  --bg: #0A0908;
+  --bg-2: #121110;
+  --bg-3: #1A1816;
+  --fg: #EDEAE0;
+  --fg-2: #C5C0B5;          /* nudged for ≥4.5:1 against --bg */
+  --fg-muted: #8E897F;      /* nudged for ≥4.5:1 small text */
+  --rule: #2A2825;
+  --rule-2: #383531;
+  --accent: #FF7849;
+  --accent-dim: rgba(255, 120, 73, 0.12);
+  --ok: #A3E635;
+}
+
+:root[data-theme="light"],
+html.light {
+  --bg: #F5F1E8;
+  --bg-2: #EDE8DC;
+  --bg-3: #E2DCCC;
+  --fg: #1A1815;
+  --fg-2: #4A463F;
+  --fg-muted: #847E72;
+  --rule: #D9D2C0;
+  --rule-2: #C9C0AB;
+  --accent: #C44D1B;
+  --accent-dim: rgba(196, 77, 27, 0.10);
+  --ok: #5A8A1B;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-muted: var(--fg-muted);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-accent: var(--accent);
+  --color-ok: var(--ok);
+  --font-display: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ── base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { color-scheme: dark; }
+html.light { color-scheme: light; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.55;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: -1px -1px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* avoid theme flash before next-themes mounts */
+html:not([data-theme]) body { background: #0A0908; color: #EDEAE0; }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── utilities ────────────────────────────────────────────────────── */
+.display { font-family: var(--font-display); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.mono    { font-family: var(--font-mono); }
+.sans    { font-family: var(--font-sans); }
+.muted   { color: var(--fg-muted); }
+.fg-2    { color: var(--fg-2); }
+.accent-fg { color: var(--accent); }
+.ok-fg   { color: var(--ok); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fg-muted);
+}
+
+/* Page container.
+   Fluid: scales with the viewport so Chrome on wide displays fills the
+   screen rather than sitting centered with large empty margins.
+     - floor 1100px : at narrower viewports the @media rules below take
+       over and the cap effectively releases.
+     - 92vw         : at typical desktop widths content uses ~92% of the
+       viewport, leaving ~4% gutters either side for the body grid +
+       radial vignette to remain visible.
+     - ceiling 1700 : at ultra-wide displays we still cap so line lengths
+       don't blow out and typography stays readable.
+*/
+.container-x {
+  max-width: clamp(1100px, 92vw, 1700px);
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 1024px) {
+  .container-x {
+    max-width: 100%;
+    padding: 0 32px;
+  }
+}
+@media (max-width: 640px) {
+  .container-x { padding: 0 20px; }
+}
+
+/* Footer needs to clear the floating chatbot button (fixed bottom-6
+   right-6 ≈ 56px tall + 24px gap). Desktop has room left of the button;
+   mobile wraps the right-column text underneath the left, so we raise
+   the bottom padding so the button doesn't sit on top of footer copy. */
+.footer-pad { padding: 28px 0 80px; }
+@media (max-width: 640px) {
+  .footer-pad { padding: 28px 0 112px; }
+}
+
+/* Multi-column grids that should collapse to a single column on small
+   screens. Each cell loses its right border and grows a bottom border so
+   the divider rhythm survives the stack. The last cell drops its bottom
+   border so the section ends cleanly. */
+@media (max-width: 640px) {
+  .grid-mobile-stack { grid-template-columns: 1fr !important; }
+  .grid-mobile-stack > * {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--rule) !important;
+  }
+  .grid-mobile-stack > *:last-child {
+    border-bottom: 0 !important;
+  }
+}
+
+/* shared section heading */
+.sec-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 12px;
+  margin-bottom: 28px;
+}
+.sec-head .l { display: flex; align-items: baseline; gap: 14px; }
+.sec-head .num { color: var(--fg-muted); font-size: 11px; }
+.sec-head .ttl { font-size: 14px; color: var(--fg); font-weight: 500; }
+.sec-head .ttl em { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 22px; color: var(--fg); padding-right: 8px; }
+.sec-head .r { color: var(--fg-muted); font-size: 11px; }
+
+/* pulse + blink animations */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(163, 230, 53, 0.7); }
+  50%      { box-shadow: 0 0 0 6px rgba(163, 230, 53, 0); }
+}
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes streamIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+[data-stream] { animation: streamIn 0.5s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-stream] { animation: none; }
+  .pulse-dot { animation: none !important; }
+  .ongoing-blink::after { animation: none !important; }
+  .panel-anim { transition: none !important; }
+}
+
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ok);
+  animation: pulse 2.4s ease-in-out infinite;
+  display: inline-block;
+}
+.pulse-dot.accent { background: var(--accent); }
+
+.kbd {
+  display: inline-flex; gap: 4px; align-items: center;
+  padding: 2px 6px;
+  border: 1px solid var(--rule-2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--fg-2);
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
