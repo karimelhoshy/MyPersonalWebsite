@@ -8,17 +8,17 @@ export function Partners() {
         <div className="l">
           <span className="num">02a</span>
           <span className="ttl">
-            <em>partners.shipped</em>
-            <span className="muted">— built for / built with</span>
+            <em>engagements</em>
+            <span className="muted">— current & recent</span>
           </span>
         </div>
-        <div className="r">5 partners · 5 industries · all healthy</div>
+        <div className="r">{PARTNERS.length} engagements · {SITE.industries.length} industries shipped</div>
       </div>
 
       <div
-        className="grid"
+        className="grid grid-mobile-stack"
         style={{
-          gridTemplateColumns: "repeat(5, minmax(0,1fr))",
+          gridTemplateColumns: `repeat(${PARTNERS.length}, minmax(0,1fr))`,
           border: "1px solid var(--rule)",
         }}
       >

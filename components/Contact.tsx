@@ -1,10 +1,9 @@
 import { SITE } from "@/lib/resume";
 
 const ENDPOINTS = [
-  { k: "email",    v: SITE.email,                       href: `mailto:${SITE.email}` },
-  { k: "phone",    v: SITE.phone,                       href: `tel:${SITE.phone.replace(/[^+\d]/g, "")}` },
-  { k: "linkedin", v: "/in/karimelhoshy",               href: SITE.linkedin },
-  { k: "github",   v: "/karimelhoshy",                  href: SITE.github },
+  { k: "email",    v: SITE.email,         href: `mailto:${SITE.email}` },
+  { k: "linkedin", v: "/in/karimelhoshy", href: SITE.linkedin },
+  { k: "github",   v: "/karimelhoshy",    href: SITE.github },
 ];
 
 export function Contact() {

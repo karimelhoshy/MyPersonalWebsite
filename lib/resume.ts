@@ -1,5 +1,17 @@
-// Single source of truth for the portfolio. Imported by both the page
-// sections and the chatbot system prompt — keeping copy here keeps both in sync.
+// Single source of truth for the portfolio.
+//
+// Two surfaces read this file:
+//   1. The page sections — they import the *PUBLIC* exports below
+//      (ROLES, ARCHIVED, PARTNERS, EDUCATION, BEYOND, SITE).
+//   2. The chatbot system prompt (server-side, edge runtime) — it imports
+//      `resumeAsJson()`, which composes the FULL un-redacted record.
+//
+// The split exists so the public page can stay portfolio-flavored (flowing
+// prose, qualitative stack chips, no dollar figures) while the chatbot can
+// still answer detailed recruiter questions ("how much did you save them?",
+// "what was the workload reduction?") with hard numbers when *the visitor*
+// asks for them. Don't move FULL fields into the public exports — they're
+// kept private on purpose.
 
 export type Role = {
   org: string;
@@ -8,13 +20,13 @@ export type Role = {
   start: string;     // YYYY-MM
   end: string | "now";
   location: string;
-  blurb: string;     // body paragraph (rich text avoided — kept as plain string)
-  stack: string[];
+  blurb: string;     // public-safe flowing paragraph
+  stack: string[];   // ~5 chips, public-safe
   metrics: { k: string; v: string; suffix?: string }[];
   status: "live" | "ok";
   // for the trace bar: position+width as percentages of the 2020→2026 ruler
   bar: { left: number; width?: number; ongoing?: boolean };
-  rangeLabel: string; // human-readable date range shown on the bar
+  rangeLabel: string;
 };
 
 export type ArchivedRun = {
@@ -43,19 +55,22 @@ export const SITE = {
   role: "AI & full-stack engineer",
   location: "Montreal, CA",
   email: "khelhoshy@gmail.com",
-  phone: "+1 438 866-0655",
   linkedin: "https://linkedin.com/in/karimelhoshy",
   github: "https://github.com/karimelhoshy",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://karimelhoshy.com",
-  tagline:
-    "Ships production GenAI systems & full-stack products.",
+  tagline: "Ships production AI systems & full-stack products.",
   languages: {
     fluent: ["English", "French", "Arabic"],
     intermediate: ["German", "Spanish"],
   },
-  industries: ["retail", "finance", "aerospace", "education", "utilities"],
+  industries: ["retail", "ecommerce", "banking", "finance", "aerospace", "education", "utilities"],
 };
 
+// ── PUBLIC ROLES ─────────────────────────────────────────────────────────
+// Flowing portfolio prose. Numbers softened to qualitative language. No
+// dollar figures, no named-client counts. The chatbot has the detailed
+// version (see RESUME_FULL_PRIVATE below) and can cite hard numbers when a
+// visitor explicitly asks.
 export const ROLES: Role[] = [
   {
     org: "Moov AI",
@@ -65,13 +80,13 @@ export const ROLES: Role[] = [
     end: "2026-01",
     location: "Montreal",
     blurb:
-      "Took a bilingual customer-facing chatbot from pilot to production for a major national retailer (Dialogflow, BigQuery, CCAI, Looker). Built an internal LangGraph agent that cut manual workload by 36% and saved an estimated $43K/yr per team member. Delivered a source-grounded RAG research agent on Databricks Vector Search for an institutional investment client. Production GenAI across 5 industries: retail, finance, aerospace, education, utilities.",
-    stack: ["LangGraph", "Dialogflow CX", "Databricks", "Vector Search", "BigQuery", "CCAI", "Python", "PySpark", "Kedro"],
+      "Designed and shipped production AI systems for enterprise clients across multiple industries. Worked end-to-end — from problem framing and architecture through evaluation, deployment, and post-launch monitoring. Most engagements involved conversational and agentic systems on cloud-native data and AI stacks, often combining retrieval, structured tool use, and observability layers.",
+    stack: ["LangGraph", "Dialogflow CX", "Databricks", "BigQuery", "Python"],
     metrics: [
-      { k: "workload reduction", v: "36", suffix: "%" },
-      { k: "savings / team member", v: "$43k", suffix: "/yr" },
-      { k: "industries shipped", v: "5" },
-      { k: "prod systems", v: "3", suffix: "+" },
+      { k: "industries", v: "7" },
+      { k: "client tier", v: "enterprise" },
+      { k: "stack", v: "GCP · Databricks" },
+      { k: "status", v: "shipped" },
     ],
     status: "ok",
     bar: { left: 66.7, width: 25 },
@@ -79,19 +94,18 @@ export const ROLES: Role[] = [
   },
   {
     org: "EY",
-    orgSubtitle: "agent-lab",
     title: "AI Engineer",
     start: "2026-03",
     end: "now",
     location: "Montreal",
     blurb:
-      "Built the intake layer and evaluation workflow for a unified agentic AI lifecycle platform at a major Canadian bank — workflow ideation, agent design, testing, monitoring, retirement. Built the Agent Lab portal that captures workflows, approved logs, data sources, and constraints to generate architecture options and implementation plans. Led training for 30+ managers, senior managers, and partners per cohort, driving cross-team adoption across the Business Transformation practice.",
-    stack: ["LangGraph", "Google ADK", "MCP", "Gemini", "Langfuse", "MLflow", "FastAPI", "React", "GCP"],
+      "AI engineer on an enterprise agentic-AI platform spanning the full lifecycle of an agent — from intake and design through testing, monitoring, and retirement. Work covers backend services, agent orchestration, and the operator-facing interfaces practitioners use to design and validate their own agents. Also runs training cohorts for staff and leadership across the broader transformation practice.",
+    stack: ["LangGraph", "Google ADK", "MCP", "Gemini", "FastAPI"],
     metrics: [
-      { k: "platform stage", v: "prod" },
-      { k: "trained per cohort", v: "30", suffix: "+" },
-      { k: "lifecycle stages", v: "5", suffix: " ideation→retire" },
-      { k: "client", v: "cdn-bank" },
+      { k: "client tier", v: "enterprise" },
+      { k: "domain", v: "agentic AI" },
+      { k: "surface", v: "backend + UI" },
+      { k: "status", v: "live" },
     ],
     status: "live",
     bar: { left: 91.7, ongoing: true },
@@ -105,13 +119,13 @@ export const ROLES: Role[] = [
     end: "now",
     location: "Remote / Cairo",
     blurb:
-      "Expanded a single-chef Shopify store into a multi-chef marketplace — 120+ orders, 40% returning customer rate. Built a chef self-service portal (React + FastAPI + MongoDB) with 65+ backend routes and RBAC across customer, chef, and admin roles. Automated Shopify admin operations: 10 webhook event types, 9 object types synced via Admin REST + GraphQL.",
-    stack: ["React", "TypeScript", "FastAPI", "MongoDB", "Shopify Admin", "REST", "GraphQL", "Webhooks", "RBAC"],
+      "Founding engineer on an early-stage marketplace product. Owns the application from frontend to backend — designing the data model, building the operator and customer experiences, and shipping the integration layer with the underlying commerce platform. Wears the usual founding-engineer hats: scoping, prototyping, deploying, and revising as the product finds its shape.",
+    stack: ["React", "TypeScript", "FastAPI", "MongoDB", "Shopify Admin"],
     metrics: [
-      { k: "orders", v: "120", suffix: "+" },
-      { k: "returning rate", v: "40", suffix: "%" },
-      { k: "backend routes", v: "65", suffix: "+" },
-      { k: "webhook events", v: "10" },
+      { k: "scope", v: "marketplace" },
+      { k: "stack", v: "fullstack TS/PY" },
+      { k: "auth model", v: "RBAC" },
+      { k: "integrations", v: "Shopify" },
     ],
     status: "live",
     bar: { left: 90, ongoing: true },
@@ -119,27 +133,19 @@ export const ROLES: Role[] = [
   },
 ];
 
-export const ARCHIVED: ArchivedRun[] = [
-  {
-    id: "run_001",
-    title: "Investment research RAG agent",
-    body: "Source-grounded research agent using embeddings + Databricks Vector Search to synthesize findings, cite sources, and generate analyst-ready reports for an institutional client.",
-    meta: "2025 · Databricks · Vector Search",
-  },
-  {
-    id: "run_002",
-    title: "Job-market intelligence",
-    body: "Pipelined and analyzed Canadian job-market data on Databricks; surfaced demand patterns by skill and region for a McGill capstone.",
-    meta: "2024 · Databricks · PySpark",
-  },
-];
+// Earlier-work / project entries intentionally empty for now — the previous
+// drafts overstated what was shipped. Repopulate before re-enabling the
+// `<ArchivedRuns />` section on the page (currently unmounted).
+export const ARCHIVED: ArchivedRun[] = [];
 
+// ── PARTNERS WALL ────────────────────────────────────────────────────────
+// Only direct engagements — places Karim was personally on the payroll or
+// founding-team. Google and Databricks are intentionally NOT on this wall:
+// they were vendor stacks Moov AI projects ran on, not personal partners.
 export const PARTNERS: ClientLogo[] = [
-  { key: "ey",         name: "EY",                 tag: "employer · 2026–",  live: true  },
-  { key: "publicis",   name: "Publicis · Moov AI", tag: "employer · 2024–26"              },
-  { key: "beiti",      name: "Beiti",              tag: "cofounder · 2026–", live: true  },
-  { key: "google",     name: "Google",             tag: "partner"                          },
-  { key: "databricks", name: "Databricks",         tag: "partner"                          },
+  { key: "ey",       name: "EY",                 tag: "employer · 2026–",  live: true },
+  { key: "publicis", name: "Publicis · Moov AI", tag: "employer · 2024–26"             },
+  { key: "beiti",    name: "Beiti",              tag: "founding engineer · 2026–", live: true },
 ];
 
 export const EDUCATION: EducationItem[] = [
@@ -151,7 +157,7 @@ export const BEYOND = [
   {
     k: "athletic_history",
     headline: "Egyptian National Swim Team.",
-    body: "Egyptian and Arab record holder. Captained swimming & soccer at school. Varsity swimming at McGill.",
+    body: "Egyptian and Arab record holder. Varsity swimming at McGill.",
   },
   {
     k: "languages.spoken",
@@ -164,26 +170,33 @@ export const BEYOND = [
     body: "Internationally schooled, comfortable in both EN and FR working environments.",
   },
   {
-    k: "recreation",
-    headline: "Open water.",
-    body: "Reading. Building things that ship.",
+    k: "hobbies",
+    headline: "Soccer.",
+    body: "Plus gaming and other sports — anything competitive away from the keyboard.",
   },
 ];
 
 /**
- * Returns the JSON literal handed to Gemini as factual grounding. Keeping
- * this deterministic prevents drift between what the page shows and what the
- * agent claims — and JSON grounds better than prose for retrieval-style Q&A.
+ * Returns the JSON literal handed to Gemini as factual grounding.
+ *
+ * Deliberately mirrors what the public page shows — no hard numbers, no
+ * dollar figures, no client names beyond what the blurbs already say, no
+ * phone. The chatbot should not be a back-channel for the CV details we
+ * chose to keep off the page; it speaks in the same register as the page.
+ *
+ * The only "extra" the chatbot gets is *behavioral* guidance — vendor
+ * framing and availability disclosure rules. Those aren't facts about
+ * Karim, they're rules about how to talk about him.
  */
 export function resumeAsJson() {
   return {
     name: SITE.name,
     role: SITE.role,
     location: SITE.location,
-    contact: { email: SITE.email, phone: SITE.phone, linkedin: SITE.linkedin, github: SITE.github },
+    contact: { email: SITE.email, linkedin: SITE.linkedin, github: SITE.github },
     languages: SITE.languages,
     industries: SITE.industries,
-    current_roles: ROLES.map((r) => ({
+    roles: ROLES.map((r) => ({
       org: r.org,
       org_subtitle: r.orgSubtitle,
       title: r.title,
@@ -192,10 +205,16 @@ export function resumeAsJson() {
       location: r.location,
       blurb: r.blurb,
       stack: r.stack,
-      metrics: r.metrics,
     })),
-    earlier_work: ARCHIVED,
     education: EDUCATION,
     beyond_code: BEYOND,
+    behavioral_notes: {
+      vendor_framing:
+        "Google and Databricks were vendor stacks Moov AI projects ran on, not Karim's partners. If asked about platforms or stacks, mention them with that framing — never as 'his partners.'",
+      availability:
+        "Karim is open to opportunities, but the page intentionally doesn't advertise it. Confirm openness if a visitor asks; don't volunteer it unprompted.",
+      detail_ceiling:
+        "Don't invent metrics, dollar figures, percentages, client names, or system counts beyond what is in the blurbs above. If a visitor asks for hard numbers, say they're available on request via email and offer to share Karim's email.",
+    },
   };
 }

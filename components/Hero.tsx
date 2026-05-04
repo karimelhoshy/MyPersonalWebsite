@@ -20,7 +20,7 @@ export function Hero() {
             }}
           >
             Ships{" "}
-            <em style={{ fontStyle: "normal", color: "var(--accent)" }}>production</em> GenAI
+            <em style={{ fontStyle: "normal", color: "var(--accent)" }}>production</em> AI
             <br /> systems &amp; full-stack
             <br /> products.
           </h1>
@@ -36,13 +36,17 @@ export function Hero() {
           >
             <span><strong style={{ color: "var(--fg)", fontWeight: 500 }}>{SITE.location.split(",")[0]}</strong>, CA</span>
             <span className="muted">·</span>
-            <span className="ok-fg">● open to opportunities</span>
-            <span className="muted">·</span>
-            <span>
-              <strong style={{ color: "var(--fg)", fontWeight: 500 }}>en</strong>{" "}
-              · <strong style={{ color: "var(--fg)", fontWeight: 500 }}>fr</strong>{" "}
-              · <strong style={{ color: "var(--fg)", fontWeight: 500 }}>ar</strong>{" "}
-              <span className="muted">fluent</span> · de · es{" "}
+            <span className="flex flex-wrap items-center" style={{ gap: "4px 8px" }}>
+              <Lang flag="🇬🇧" code="en" strong />
+              <span className="muted">·</span>
+              <Lang flag="🇫🇷" code="fr" strong />
+              <span className="muted">·</span>
+              <Lang flag="🇪🇬" code="ar" strong />
+              <span className="muted">fluent</span>
+              <span className="muted">·</span>
+              <Lang flag="🇩🇪" code="de" />
+              <span className="muted">·</span>
+              <Lang flag="🇪🇸" code="es" />
               <span className="muted">intermediate</span>
             </span>
           </div>
@@ -69,7 +73,7 @@ export function Hero() {
               letterSpacing: "0.12em",
             }}
           >
-            <span>session.metadata</span>
+            <span>metadata</span>
             <span>·json</span>
           </div>
           <dl
@@ -77,11 +81,9 @@ export function Hero() {
             style={{ gridTemplateColumns: "auto 1fr", rowGap: 6, columnGap: 16 }}
           >
             <Row k="role" v={SITE.role} />
-            <Row k="currently" v={<><span style={{ color: "var(--accent)" }}>EY</span> · <span style={{ color: "var(--accent)" }}>Beiti</span></>} />
-            <Row k="previously" v="Moov AI / Publicis" />
+            <Row k="based" v="Montreal · remote-friendly" />
             <Row k="education" v="McGill, BA CS · May 2024" />
-            <Row k="industries" v={<>5 <span className="muted">(retail, finance, aerospace, education, utilities)</span></>} />
-            <Row k="partners" v="Google · Databricks" />
+            <Row k="industries" v={<>7 <span className="muted">(retail, ecommerce, banking, finance, aerospace, education, utilities)</span></>} />
             <Row k="status" v={<span className="ok-fg">200 OK</span>} />
           </dl>
         </aside>
@@ -96,5 +98,17 @@ function Row({ k, v }: { k: string; v: React.ReactNode }) {
       <dt style={{ color: "var(--fg-muted)" }}>{k}</dt>
       <dd className="m-0" style={{ color: "var(--fg)" }}>{v}</dd>
     </>
+  );
+}
+
+// Inline language pill: flag emoji (color) + 2-letter code. The emoji
+// inherits its native color, the code follows the document foreground so
+// it works in both light and dark themes.
+function Lang({ flag, code, strong }: { flag: string; code: string; strong?: boolean }) {
+  return (
+    <span className="inline-flex items-center" style={{ gap: 4 }}>
+      <span aria-hidden style={{ fontSize: 14, lineHeight: 1 }}>{flag}</span>
+      <span style={{ color: "var(--fg)", fontWeight: strong ? 500 : 400 }}>{code}</span>
+    </span>
   );
 }

@@ -15,7 +15,7 @@ export function BeyondCode() {
       </div>
 
       <div
-        className="grid"
+        className="grid grid-mobile-stack"
         style={{
           gridTemplateColumns: "1fr 1fr",
           border: "1px solid var(--rule)",

@@ -110,15 +110,56 @@ input:focus-visible,
   color: var(--fg-muted);
 }
 
+/* Page container.
+   Fluid: scales with the viewport so Chrome on wide displays fills the
+   screen rather than sitting centered with large empty margins.
+     - floor 1100px : at narrower viewports the @media rules below take
+       over and the cap effectively releases.
+     - 92vw         : at typical desktop widths content uses ~92% of the
+       viewport, leaving ~4% gutters either side for the body grid +
+       radial vignette to remain visible.
+     - ceiling 1700 : at ultra-wide displays we still cap so line lengths
+       don't blow out and typography stays readable.
+*/
 .container-x {
-  max-width: 1280px;
+  max-width: clamp(1100px, 92vw, 1700px);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 40px;
   position: relative;
   z-index: 1;
 }
+@media (max-width: 1024px) {
+  .container-x {
+    max-width: 100%;
+    padding: 0 32px;
+  }
+}
 @media (max-width: 640px) {
   .container-x { padding: 0 20px; }
+}
+
+/* Footer needs to clear the floating chatbot button (fixed bottom-6
+   right-6 ≈ 56px tall + 24px gap). Desktop has room left of the button;
+   mobile wraps the right-column text underneath the left, so we raise
+   the bottom padding so the button doesn't sit on top of footer copy. */
+.footer-pad { padding: 28px 0 80px; }
+@media (max-width: 640px) {
+  .footer-pad { padding: 28px 0 112px; }
+}
+
+/* Multi-column grids that should collapse to a single column on small
+   screens. Each cell loses its right border and grows a bottom border so
+   the divider rhythm survives the stack. The last cell drops its bottom
+   border so the section ends cleanly. */
+@media (max-width: 640px) {
+  .grid-mobile-stack { grid-template-columns: 1fr !important; }
+  .grid-mobile-stack > * {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--rule) !important;
+  }
+  .grid-mobile-stack > *:last-child {
+    border-bottom: 0 !important;
+  }
 }
 
 /* shared section heading */

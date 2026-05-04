@@ -16,7 +16,7 @@ export function CareerTrace() {
             <span className="muted">— current spans</span>
           </span>
         </div>
-        <div className="r">3 spans · all 200 OK · click to expand</div>
+        <div className="r">3 spans · click any row ▾</div>
       </div>
 
       <div
@@ -96,7 +96,24 @@ export function CareerTrace() {
               }}
             >
               <div className="flex flex-col gap-0.5">
-                <div style={{ color: "var(--fg)", fontWeight: 500 }}>
+                <div
+                  className="flex items-center"
+                  style={{ color: "var(--fg)", fontWeight: 500, gap: 8 }}
+                >
+                  <span
+                    aria-hidden
+                    style={{
+                      display: "inline-block",
+                      width: 14,
+                      color: isOpen ? "var(--accent)" : "var(--fg-muted)",
+                      fontSize: 11,
+                      lineHeight: 1,
+                      transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                      transition: "transform .15s ease, color .15s",
+                    }}
+                  >
+                    ▶
+                  </span>
                   <em
                     className="display"
                     style={{
@@ -108,8 +125,18 @@ export function CareerTrace() {
                     {role.title}
                   </em>
                 </div>
-                <div className="muted" style={{ fontSize: 11 }}>
+                <div className="muted" style={{ fontSize: 11, paddingLeft: 22 }}>
                   {role.org.toLowerCase()}{role.orgSubtitle ? ` · ${role.orgSubtitle}` : ""}
+                  <span
+                    style={{
+                      paddingLeft: 8,
+                      color: "var(--fg-muted)",
+                      opacity: isOpen ? 0 : 0.7,
+                      transition: "opacity .15s",
+                    }}
+                  >
+                    — {isOpen ? "" : "click for details"}
+                  </span>
                 </div>
               </div>
               <div

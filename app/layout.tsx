@@ -39,26 +39,26 @@ export const metadata: Metadata = {
     template: `%s · ${SITE.name}`,
   },
   description:
-    "Karim El Hoshy — AI Engineer at EY, Founding Engineer at Beiti. Production GenAI across 5 industries. Montreal · open to opportunities.",
+    "Karim El Hoshy — AI & full-stack engineer. Production AI systems across 7 industries. Montreal.",
   applicationName: `${SITE.name} portfolio`,
   authors: [{ name: SITE.name, url: SITE.url }],
   creator: SITE.name,
   keywords: [
-    "AI engineer", "full-stack engineer", "GenAI", "LangGraph", "Gemini",
+    "AI engineer", "full-stack engineer", "AI systems", "LangGraph", "Gemini",
     "Databricks", "Montreal", "Karim El Hoshy",
   ],
   openGraph: {
     type: "profile",
     siteName: `${SITE.name} portfolio`,
     title: `${SITE.name} — ${SITE.role}`,
-    description: "Ships production GenAI systems & full-stack products.",
+    description: "Ships production AI systems & full-stack products.",
     url: SITE.url,
     locale: "en_CA",
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.role}`,
-    description: "Ships production GenAI systems & full-stack products.",
+    description: "Ships production AI systems & full-stack products.",
   },
   alternates: { canonical: SITE.url },
   robots: { index: true, follow: true },
@@ -78,7 +78,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     jobTitle: SITE.role,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
-    telephone: SITE.phone,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Montreal",

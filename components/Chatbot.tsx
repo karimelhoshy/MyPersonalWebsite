@@ -7,7 +7,7 @@ type Msg = { role: "user" | "model"; text: string };
 const STARTERS = [
   "what have you shipped at EY?",
   "tell me about Beiti",
-  "are you open to senior roles?",
+  "why should I hire Karim?",
 ];
 
 export function Chatbot() {
@@ -151,8 +151,7 @@ export function Chatbot() {
         role="dialog"
         aria-label="Chat with Karim's agent"
         aria-hidden={!open}
-        // @ts-expect-error inert is supported in React 19 / DOM
-        inert={!open ? "" : undefined}
+        inert={!open}
         className="panel-anim fixed top-0 right-0 bottom-0 z-[70] flex flex-col"
         style={{
           width: 460,
@@ -217,7 +216,7 @@ export function Chatbot() {
                 Ask anything about my work.
               </h3>
               <div className="muted" style={{ fontSize: 12.5 }}>
-                It knows my résumé, the projects above, and a bit of the personality.
+                It knows my résumé and a bit of the personality. Anything more specific lives behind email.
               </div>
               <div className="flex flex-col gap-2 mt-3">
                 {STARTERS.map((s) => (

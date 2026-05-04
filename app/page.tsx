@@ -3,7 +3,6 @@ import { Hero } from "@/components/Hero";
 import { CareerTrace } from "@/components/CareerTrace";
 import { Partners } from "@/components/Partners";
 import { Education } from "@/components/Education";
-import { ArchivedRuns } from "@/components/ArchivedRuns";
 import { BeyondCode } from "@/components/BeyondCode";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
@@ -18,7 +17,6 @@ export default function Home() {
         <CareerTrace />
         <Partners />
         <Education />
-        <ArchivedRuns />
         <BeyondCode />
         <Contact />
       </main>
