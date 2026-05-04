@@ -8,7 +8,7 @@ export function Hero() {
         style={{ gridTemplateColumns: "minmax(0, 7fr) minmax(0, 5fr)" }}
       >
         <div>
-          <div className="label" style={{ marginBottom: 18 }}>session.intro</div>
+          <div className="label" style={{ marginBottom: 18 }}>intro</div>
           <h1
             className="display"
             style={{
@@ -24,6 +24,23 @@ export function Hero() {
             <br /> systems &amp; full-stack
             <br /> products.
           </h1>
+          <p
+            className="mono"
+            style={{
+              fontSize: 13.5,
+              color: "var(--fg-2)",
+              margin: "0 0 18px",
+              lineHeight: 1.55,
+            }}
+          >
+            <strong style={{ color: "var(--fg)", fontWeight: 500 }}>
+              {SITE.name}
+            </strong>
+            <span className="muted"> · </span>
+            {SITE.role}
+            <span className="muted"> · </span>
+            based in {SITE.location.split(",")[0]}.
+          </p>
           <div
             className="mono flex flex-wrap gap-x-4 gap-y-2 items-center"
             style={{

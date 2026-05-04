@@ -22,10 +22,8 @@ export function TopBar() {
         <div className="flex items-center justify-between h-11 text-[12px]">
           <div className="flex items-center gap-3.5">
             <span style={{ color: "var(--fg)", fontWeight: 500 }}>
-              karim<span className="muted">.elhoshy</span>
+              Karim El Hoshy
             </span>
-            <span className="muted">/</span>
-            <span className="muted">trace_a8f3e2c1</span>
             <span
               className="hidden sm:inline-flex items-center gap-1.5 px-2 py-[2px] rounded-full"
               style={{ border: "1px solid var(--rule-2)", color: "var(--fg-2)" }}
@@ -35,7 +33,6 @@ export function TopBar() {
           </div>
           <nav className="flex items-center gap-[18px]">
             <NavLink href="#trace">Work</NavLink>
-            <NavLink href="#archived">Earlier</NavLink>
             <NavLink href="#metadata">Beyond</NavLink>
             <NavLink href="#contact">Contact</NavLink>
             <span className="kbd hidden md:inline-flex">

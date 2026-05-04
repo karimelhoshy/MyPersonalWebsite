@@ -7,11 +7,11 @@ export function BeyondCode() {
         <div className="l">
           <span className="num">04</span>
           <span className="ttl">
-            <em>session.metadata</em>
-            <span className="muted">— beyond code</span>
+            <em>beyond.code</em>
+            <span className="muted">— outside work</span>
           </span>
         </div>
-        <div className="r">non-functional attributes</div>
+        <div className="r">a few things about me</div>
       </div>
 
       <div
